@@ -45,14 +45,16 @@ def generate_audio(text, lang):
     buffer.seek(0)
     return buffer
 
-def get_audio_player(audio_buffer):
-    audio_base64 = base64.b64encode(audio_buffer.read()).decode()
-    audio_html = f"""
-    <audio controls>
-        <source src="data:audio/mp3;base64,{audio_base64}" type="audio/mp3">
-        Your browser does not support the audio element.
-    </audio>
-    """
+def get_audio_player(audio, filename="audio.mp3"):
+    b64 = base64.b64encode(audio.read()).decode()
+    audio_html = f'''
+        <audio controls>
+            <source src="data:audio/mp3;base64,{b64}" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+        <br>
+        <a href="data:audio/mp3;base64,{b64}" download="{filename}">🔊 다운로드</a>
+    '''
     return audio_html
 
 if translate_button and input_text:
