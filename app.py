@@ -3,6 +3,7 @@ import requests
 from gtts import gTTS
 from io import BytesIO
 import base64
+import time
 
 # 페이지 설정
 st.set_page_config(page_title="다국어 번역기 (음성 지원)", layout="centered")
@@ -45,7 +46,9 @@ def generate_audio(text, lang):
     buffer.seek(0)
     return buffer
 
-def get_audio_player(audio, filename="audio.mp3"):
+def get_audio_player(audio, lang):
+    timestamp = int(time.time())  # 현재 시간을 타임스탬프로 사용
+    filename = f"audio_{lang}_{timestamp}.mp3"
     b64 = base64.b64encode(audio.read()).decode()
     audio_html = f'''
         <audio controls>
@@ -64,5 +67,5 @@ if translate_button and input_text:
         if translated_text:
             st.write(translated_text)
             audio_buffer = generate_audio(translated_text, lang_code)
-            audio_player = get_audio_player(audio_buffer)
+            audio_player = get_audio_player(audio_buffer, lang_code)
             st.markdown(audio_player, unsafe_allow_html=True)
